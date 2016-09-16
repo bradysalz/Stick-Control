@@ -1,17 +1,27 @@
 {% extends "base.html" %}
 {% block body %}
+
 <div>
-<form class="form-horizontal">
+<form class="form-horizontal" action="/" method="post">
 <fieldset>
 
 <!-- Form Name -->
 <legend>Add Session</legend>
 
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="practice-date">Date</label>  
+  <div class="col-md-2">
+  <input id="practice-date" name="practice-date" type="text" placeholder="MM/DD/YY" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="selectbasic">Exercise</label>
-  <div class="col-md-4">
-    <select id="selectbasic" name="selectbasic" class="form-control">
+  <label class="col-md-4 control-label" for="exercise-name">Exercise</label>
+  <div class="col-md-2">
+    <select id="exercise-name" name="exercise-name" class="form-control">
       <option value="single-beat">Single Beat Combinations</option>
       <option value="triplets">Triplets</option>
       <option value="short-roll-single">Short Rolls (Single)</option>
@@ -24,7 +34,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="exercise-start">Start #</label>  
   <div class="col-md-1">
-  <input id="exercise-start" name="exercise-start" type="text" placeholder="1" class="form-control input-md">
+  <input id="exercise-start" name="exercise-start" type="text" placeholder="1" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -42,16 +52,16 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="tempo">Tempo</label>  
   <div class="col-md-1">
-  <input id="tempo" name="tempo" type="text" placeholder="128" class="form-control input-md">
+  <input id="tempo" name="tempo" type="text" placeholder="128" class="form-control input-md" required="">
     
   </div>
 </div>
 
 <!-- Button -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="submit"></label>
+  <label class="col-md-4 control-label" for="submitfor"></label>
   <div class="col-md-4">
-    <button id="submit" name="submit" class="btn btn-primary">Submit</button>
+    <button id="submitid" name="submitname" class="btn btn-primary">Submit</button>
   </div>
 </div>
 
@@ -59,4 +69,5 @@
 </form>
 
 </div>
+
 {% endblock %}

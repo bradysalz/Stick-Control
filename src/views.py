@@ -1,7 +1,7 @@
 from src import app
-from flask import request, render_template, send_file, jsonify, redirect, url_for
+from flask import request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from src.models import db
+from src.models import db, Practice, add_session
 from config import SECRET_KEY
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///practice.db'
@@ -15,20 +15,37 @@ app.secret_key = SECRET_KEY
 
 db.init_app(app)
 
-@app.route('/')
+
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('base.html')
+    if request.method == 'GET':
+        return render_template('base.html')
+
+    if request.method == 'POST':
+        add_session(db, request.form)
+        return render_template('base.html')
 
 
 @app.route('/add')
-def add_practice():
+def add():
     return render_template('add.html')
+
 
 @app.route('/refresh', methods=['POST', 'GET'])
 def refresh():
     if request.method == 'GET':
-        return redirect(url_for('/')) 
+        return redirect(url_for('/'))
 
     if request.method == 'POST':
         # do the refresh
-        return redirect(url_for('/'))         
+        return redirect(url_for('/'))
+
+
+@app.route('/edit')
+def edit():
+    return render_template('base.html')
+
+@app.route('/check')
+def check():
+    print(Practice.query.all())
+    return render_template('base.html')
