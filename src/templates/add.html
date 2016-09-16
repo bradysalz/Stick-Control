@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block body %}
+<div>
+<form class="form-horizontal">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Add Session</legend>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic">Exercise</label>
+  <div class="col-md-4">
+    <select id="selectbasic" name="selectbasic" class="form-control">
+      <option value="single-beat">Single Beat Combinations</option>
+      <option value="triplets">Triplets</option>
+      <option value="short-roll-single">Short Rolls (Single)</option>
+      <option value="short-roll-double">Short Rolls (Double)</option>
+    </select>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="exercise-start">Start #</label>  
+  <div class="col-md-1">
+  <input id="exercise-start" name="exercise-start" type="text" placeholder="1" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="exercise-stop">Stop #</label>  
+  <div class="col-md-1">
+  <input id="exercise-stop" name="exercise-stop" type="text" placeholder="20" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="tempo">Tempo</label>  
+  <div class="col-md-1">
+  <input id="tempo" name="tempo" type="text" placeholder="128" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-4">
+    <button id="submit" name="submit" class="btn btn-primary">Submit</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+</div>
+{% endblock %}
