@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block body %}
+<div>
+    <div id="chart" class="chart"></div>
+    <script type="text/javascript">
+
+// init margins
+var margin = {top: 20, right: 90, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// init axis
+var x = d3.scaleTime([0, width]),
+    y = d3.scaleLinear([height, 0]),
+    z = d3.scaleLinear(["white", "steelblue"]);
+
+var xStep = 864e5,
+    yStep = 1,
+    parseDate = d3.timeParse("%Y-%m-%d %X"),
+    formatDate = d3.timeFormat("%b %d");
+
+// init SVG
+var svg = d3.select("chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv('/data/all', function(error, data) {        
+    // check for errors
+    if(error) throw error;
+
+    // parse CSV data into proper objects
+    data.forEach(function(d) {
+        console.log(d);
+        d.Name = d.Name.trim();
+        d.date = parseDate(d.date);
+        d.Pattern = +d.Pattern;
+        d.Tempo = +d.Tempo;
+        console.log(d);
+    });
+
+    // worry about name selection later
+    x.domain(d3.extent(data, function(d) { return d.date }));
+    y.domain(d3.extent(data, function(d) { return d.pattern }));
+    z.domain([d3.min(data, function(d) { return d.data }),
+              d3.max(data, function(d) { return d.data })]);
+
+    console.log(d3.min(data, function(d) { return d.data }));
+    svg.selectAll(".tile")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "tile")
+        .attr("x", function(d) { return x(d.date); })
+        .attr("y", function(d) { return y(d.pattern + yStep); })
+        .attr("width", x(xStep) - x(0))
+        .attr("height",  y(0) - y(yStep))
+        .style("fill", function(d) { return z(d.tempo); });
+
+    // Add a legend for the color values.
+    var legend = svg.selectAll(".legend")
+        .data(z.ticks(6).slice(1).reverse())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(" + (width + 20) + "," + (20 + i * 20) + ")"; });
+
+    legend.append("rect")
+        .attr("width", 20)
+        .attr("height", 20)
+        .style("fill", z);
+
+    legend.append("text")
+        .attr("x", 26)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text(String);
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width + 20)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text("Count");
+
+    // Add an x-axis with label.
+    // svg.append("g")
+    //     .attr("class", "x axis")
+    //     .attr("transform", "translate(0," + height + ")")
+    //     .call(d3.axisBottom())
+    //     .append("text")
+    //     .attr("class", "label")
+    //     .attr("x", width)
+    //     .attr("y", -6)
+    //     .attr("text-anchor", "end")
+    //     .text("Date");
+
+    // // Add a y-axis with label.
+    // svg.append("g")
+    //     .attr("class", "y axis")
+    //     .call(d3.axisLeft().scale(y))
+    //     .append("text")
+    //     .attr("class", "label")
+    //     .attr("y", 6)
+    //     .attr("dy", ".71em")
+    //     .attr("text-anchor", "end")
+    //     .attr("transform", "rotate(-90)")
+    //     .text("Value");
+});
+    </script>
+</div>
+{% endblock %}

@@ -15,15 +15,14 @@ app.secret_key = SECRET_KEY
 
 db.init_app(app)
 
-
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'GET':
-        return render_template('base.html')
+        return render_template('home.html')
 
     if request.method == 'POST':
         add_session(db, request.form)
-        return render_template('base.html')
+        return render_template('home.html')
 
 
 @app.route('/add')
@@ -41,11 +40,27 @@ def refresh():
         return redirect(url_for('/'))
 
 
+@app.route('/data/<exercise_name>')
+def show_data(exercise_name):
+    dataset = Practice.query.all()
+    return render_template('data.html', dataset=dataset)
+
+
 @app.route('/edit')
 def edit():
     return render_template('base.html')
 
+
 @app.route('/check')
 def check():
-    print(Practice.query.all())
-    return render_template('base.html')
+    data = Practice.query.all()
+    data = [(d.date, d.number, d.tempo) for d in data]
+    date, number, tempo = zip(*data)
+    
+    date = [d.strftime("%m/%d/%Y") for d in date]
+    
+    header = "Date,Number,Tempo\n"
+    body = [date[n] + ',' + str(number[n]) + ',' + str(tempo[n])
+            for n in range(len(date))]
+    body = '\n'.join(body)
+    return render_template('home.html', data=header+body)
